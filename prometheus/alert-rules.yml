@@ -1,0 +1,256 @@
+groups:
+  - name: node-alerts
+    interval: 30s
+    rules:
+      - alert: HighCPU
+        expr: |
+          (1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: >-
+            CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}
+            for more than 5 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md
+
+      - alert: CriticalCPU
+        expr: |
+          (1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[3m]))) * 100 > 95
+        for: 3m
+        labels:
+          severity: critical
+          component: node
+        annotations:
+          summary: "Critical CPU usage on {{ $labels.instance }}"
+          description: >-
+            CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}.
+            Immediate action required.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md
+
+      - alert: HighMemory
+        expr: |
+          (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+        for: 5m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: >-
+            Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}
+            for more than 5 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-MEMORY.md
+
+      - alert: DiskFull
+        expr: |
+          (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"} /
+          node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"})) * 100 > 90
+        for: 15m
+        labels:
+          severity: warning
+          component: node
+        annotations:
+          summary: "Disk almost full on {{ $labels.instance }}"
+          description: >-
+            Disk {{ $labels.mountpoint }} on {{ $labels.instance }} is
+            {{ $value | humanizePercentage }} full.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/DISK-FULL.md
+
+      - alert: DiskCritical
+        expr: |
+          (1 - (node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"} /
+          node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|squashfs|vfat"})) * 100 > 95
+        for: 5m
+        labels:
+          severity: critical
+          component: node
+        annotations:
+          summary: "Disk critically full on {{ $labels.instance }}"
+          description: >-
+            Disk {{ $labels.mountpoint }} on {{ $labels.instance }} is
+            {{ $value | humanizePercentage }} full. Immediate cleanup required.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/DISK-FULL.md
+
+      - alert: TargetDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: prometheus
+        annotations:
+          summary: "Target {{ $labels.instance }} is down"
+          description: >-
+            {{ $labels.job }} target {{ $labels.instance }} has been down
+            for more than 5 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+
+  - name: kubernetes-alerts
+    interval: 30s
+    rules:
+      - alert: PodCrashLooping
+        expr: |
+          rate(kube_pod_container_status_restarts_total[15m]) > 0
+        for: 15m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping"
+          description: >-
+            Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }})
+            is restarting {{ $value | humanize }} times per second.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+
+      - alert: PodNotReady
+        expr: |
+          sum by(namespace, pod) (kube_pod_status_phase{phase!~"Running|Succeeded"}) > 0
+        for: 10m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "Pod {{ $labels.namespace }}/{{ $labels.pod }} not ready"
+          description: >-
+            Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state
+            for more than 10 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+
+      - alert: DeploymentReplicasMismatch
+        expr: |
+          kube_deployment_spec_replicas != kube_deployment_status_replicas_available
+        for: 10m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has mismatched replicas"
+          description: >-
+            Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has {{ $value }}
+            replicas available, but {{ $labels.spec_replicas }} desired.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+
+      - alert: NodeNotReady
+        expr: |
+          kube_node_status_condition{condition="Ready",status="true"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: kubernetes
+        annotations:
+          summary: "Node {{ $labels.node }} is not ready"
+          description: >-
+            Node {{ $labels.node }} has been in NotReady state
+            for more than 5 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+
+      - alert: PersistentVolumeClaimPending
+        expr: |
+          kube_persistentvolumeclaim_status_phase{phase="Pending"} == 1
+        for: 10m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "PVC {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} is pending"
+          description: >-
+            PersistentVolumeClaim {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}
+            has been pending for more than 10 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/DISK-FULL.md
+
+  - name: application-alerts
+    interval: 30s
+    rules:
+      - alert: High5xxRate
+        expr: |
+          (sum by(service) (rate(http_requests_total{status=~"5.."}[5m])) /
+          sum by(service) (rate(http_requests_total[5m]))) * 100 > 5
+        for: 5m
+        labels:
+          severity: critical
+          component: application
+        annotations:
+          summary: "High 5xx error rate for {{ $labels.service }}"
+          description: >-
+            Service {{ $labels.service }} has {{ $value | humanizePercentage }}
+            5xx error rate over the last 5 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md
+
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.99, sum by(service, le) (rate(http_request_duration_seconds_bucket[5m]))) > 2
+        for: 5m
+        labels:
+          severity: warning
+          component: application
+        annotations:
+          summary: "High p99 latency for {{ $labels.service }}"
+          description: >-
+            Service {{ $labels.service }} has p99 latency of {{ $value | humanizeDuration }}
+            over the last 5 minutes.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md
+
+      - alert: LowRequestRate
+        expr: |
+          sum by(service) (rate(http_requests_total[5m])) < 1
+        for: 10m
+        labels:
+          severity: warning
+          component: application
+        annotations:
+          summary: "Low request rate for {{ $labels.service }}"
+          description: >-
+            Service {{ $labels.service }} is receiving {{ $value | humanize }} requests per second.
+            Service may be down or traffic is not reaching it.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+
+  - name: certificate-alerts
+    interval: 1h
+    rules:
+      - alert: CertificateExpiringSoon
+        expr: |
+          (probe_ssl_earliest_cert_expiry - time()) / 86400 < 30
+        for: 1h
+        labels:
+          severity: warning
+          component: security
+        annotations:
+          summary: "Certificate for {{ $labels.instance }} expiring soon"
+          description: >-
+            Certificate for {{ $labels.instance }} will expire in
+            {{ $value | humanizeDuration }}.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack
+            /blob/main/runbooks/CERTIFICATE-EXPIRY.md
+
+      - alert: CertificateExpiryCritical
+        expr: |
+          (probe_ssl_earliest_cert_expiry - time()) / 86400 < 7
+        for: 1h
+        labels:
+          severity: critical
+          component: security
+        annotations:
+          summary: "Certificate for {{ $labels.instance }} expiring within 7 days"
+          description: >-
+            Certificate for {{ $labels.instance }} will expire in
+            {{ $value | humanizeDuration }}. Immediate renewal required.
+          runbook_url: >-
+            https://github.com/justin-henson/au-nz-observability-stack
+            /blob/main/runbooks/CERTIFICATE-EXPIRY.md
