@@ -1,0 +1,221 @@
+global:
+  resolve_timeout: 5m
+  slack_api_url: '# Configure via environment variable SLACK_WEBHOOK_URL'
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+route:
+  receiver: 'default'
+  group_by: ['alertname', 'namespace', 'service']
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - match:
+        severity: critical
+      receiver: 'pagerduty-critical'
+      group_wait: 10s
+      group_interval: 1m
+      repeat_interval: 4h
+      continue: false
+
+    - match:
+        severity: warning
+      receiver: 'slack-alerts'
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      continue: false
+
+    - match:
+        severity: info
+      receiver: 'email-digest'
+      group_wait: 5m
+      group_interval: 1h
+      repeat_interval: 24h
+      continue: false
+
+    - match:
+        namespace: production
+        component: database
+      receiver: 'pagerduty-database-team'
+      group_wait: 10s
+      repeat_interval: 4h
+
+    - match:
+        namespace: staging
+      receiver: 'slack-staging'
+      group_wait: 1m
+      repeat_interval: 24h
+
+inhibit_rules:
+  - source_match:
+      severity: critical
+    target_match:
+      severity: warning
+    equal:
+      - service
+      - namespace
+
+  - source_match:
+      alertname: NodeNotReady
+    target_match_re:
+      alertname: (PodNotReady|PodCrashLooping|HighCPU|HighMemory)
+    equal:
+      - node
+
+  - source_match:
+      alertname: ServiceDegradation
+    target_match_re:
+      alertname: (High5xxRate|HighLatency)
+    equal:
+      - service
+
+  - source_match:
+      alertname: TargetDown
+    target_match_re:
+      alertname: .*
+    equal:
+      - instance
+
+receivers:
+  - name: 'default'
+    slack_configs:
+      - channel: '#alerts-default'
+        title: 'Alert: {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+        send_resolved: true
+
+  - name: 'pagerduty-critical'
+    pagerduty_configs:
+      - service_key: 'REPLACE_WITH_PAGERDUTY_INTEGRATION_KEY'
+        severity: '{{ if eq .GroupLabels.severity "critical" }}critical{{ else }}error{{ end }}'
+        description: '{{ .GroupLabels.alertname }}: {{ .GroupLabels.service }}'
+        details:
+          summary: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+          description: '{{ range .Alerts }}{{ .Annotations.description }}{{ end }}'
+          runbook_url: '{{ range .Alerts }}{{ .Annotations.runbook_url }}{{ end }}'
+          num_firing: '{{ .Alerts.Firing | len }}'
+          num_resolved: '{{ .Alerts.Resolved | len }}'
+        send_resolved: true
+
+  - name: 'pagerduty-database-team'
+    pagerduty_configs:
+      - service_key: 'REPLACE_WITH_DATABASE_TEAM_KEY'
+        severity: 'error'
+        description: 'Database Alert: {{ .GroupLabels.alertname }}'
+        send_resolved: true
+
+  - name: 'slack-alerts'
+    slack_configs:
+      - channel: '#alerts'
+        username: 'Alertmanager'
+        icon_emoji: ':warning:'
+        title: >-
+          {{ if eq .Status "firing" }}:red_circle:{{ else }}:white_check_mark:{{ end }}
+          {{ .GroupLabels.severity | toUpper }}: {{ .GroupLabels.alertname }}
+        text: |
+          {{ range .Alerts }}
+          *Summary:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Service:* {{ .Labels.service }}
+          *Namespace:* {{ .Labels.namespace }}
+          *Duration:* {{ .StartsAt | since }}
+          {{ if .Annotations.runbook_url }}
+          :book: <{{ .Annotations.runbook_url }}|Runbook>
+          {{ end }}
+          {{ if .Annotations.dashboard_url }}
+          :bar_chart: <{{ .Annotations.dashboard_url }}|Dashboard>
+          {{ end }}
+          {{ end }}
+        send_resolved: true
+        actions:
+          - type: button
+            text: 'Runbook :book:'
+            url: '{{ (index .Alerts 0).Annotations.runbook_url }}'
+          - type: button
+            text: 'Silence :no_bell:'
+            url: '{{ template "__alert_silence_link" . }}'
+          - type: button
+            text: 'Dashboard :bar_chart:'
+            url: '{{ (index .Alerts 0).Annotations.dashboard_url }}'
+
+  - name: 'slack-staging'
+    slack_configs:
+      - channel: '#alerts-staging'
+        username: 'Alertmanager (Staging)'
+        title: '[STAGING] {{ .GroupLabels.alertname }}'
+        text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
+        send_resolved: true
+
+  - name: 'email-digest'
+    email_configs:
+      - to: 'sre-team@company.internal'
+        from: 'alertmanager@company.internal'
+        smarthost: 'smtp.company.internal:587'
+        auth_username: 'alertmanager'
+        auth_password: 'REPLACE_WITH_SMTP_PASSWORD'
+        require_tls: true
+        headers:
+          Subject: >-
+            [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
+            {{ .GroupLabels.alertname }}
+        html: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; }
+              table { border-collapse: collapse; width: 100%; }
+              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+              th { background-color: #f2f2f2; }
+              .firing { background-color: #ffebee; }
+              .resolved { background-color: #e8f5e9; }
+            </style>
+          </head>
+          <body>
+            <h2>Alert: {{ .GroupLabels.alertname }}</h2>
+            <p><strong>Status:</strong> {{ .Status }}</p>
+            <p><strong>Severity:</strong> {{ .GroupLabels.severity }}</p>
+            <table>
+              <tr>
+                <th>Alert</th>
+                <th>Service</th>
+                <th>Summary</th>
+                <th>Started</th>
+                <th>Runbook</th>
+              </tr>
+              {{ range .Alerts }}
+              <tr class="{{ .Status }}">
+                <td>{{ .Labels.alertname }}</td>
+                <td>{{ .Labels.service }}</td>
+                <td>{{ .Annotations.summary }}</td>
+                <td>{{ .StartsAt }}</td>
+                <td><a href="{{ .Annotations.runbook_url }}">Link</a></td>
+              </tr>
+              {{ end }}
+            </table>
+          </body>
+          </html>
+        send_resolved: true
+
+templates:
+  - '/etc/alertmanager/templates/*.tmpl'
+
+time_intervals:
+  - name: business_hours
+    time_intervals:
+      - times:
+          - start_time: '09:00'
+            end_time: '17:00'
+        weekdays: ['monday:friday']
+        location: 'Australia/Sydney'
+
+  - name: after_hours
+    time_intervals:
+      - times:
+          - start_time: '17:00'
+            end_time: '09:00'
+        weekdays: ['monday:friday']
+        location: 'Australia/Sydney'
+      - weekdays: ['saturday', 'sunday']
+        location: 'Australia/Sydney'
