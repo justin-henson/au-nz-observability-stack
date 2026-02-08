@@ -1,0 +1,21 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: 15s
+      queryTimeout: 60s
+      httpMethod: POST
+
+  - name: CloudWatch
+    type: cloudwatch
+    access: proxy
+    jsonData:
+      authType: default
+      defaultRegion: ap-southeast-2
+    editable: false

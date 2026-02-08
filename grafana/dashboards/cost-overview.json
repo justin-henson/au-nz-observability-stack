@@ -1,0 +1,290 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "CloudWatch",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "sum"],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "dimensions": {},
+          "expression": "",
+          "id": "",
+          "matchExact": false,
+          "metricName": "EstimatedCharges",
+          "namespace": "AWS/Billing",
+          "period": "",
+          "refId": "A",
+          "region": "us-east-1",
+          "statistics": ["Maximum"]
+        }
+      ],
+      "title": "AWS Total Estimated Charges",
+      "type": "timeseries",
+      "description": "Total estimated AWS charges over time. Monitor for unexpected cost increases that may indicate resource sprawl or misconfiguration."
+    },
+    {
+      "datasource": "CloudWatch",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": ["sum"],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "dimensions": {
+            "ServiceName": "AmazonEC2"
+          },
+          "expression": "",
+          "id": "",
+          "matchExact": true,
+          "metricName": "EstimatedCharges",
+          "namespace": "AWS/Billing",
+          "period": "",
+          "refId": "A",
+          "region": "us-east-1",
+          "statistics": ["Maximum"]
+        },
+        {
+          "dimensions": {
+            "ServiceName": "AmazonRDS"
+          },
+          "expression": "",
+          "id": "",
+          "matchExact": true,
+          "metricName": "EstimatedCharges",
+          "namespace": "AWS/Billing",
+          "period": "",
+          "refId": "B",
+          "region": "us-east-1",
+          "statistics": ["Maximum"]
+        },
+        {
+          "dimensions": {
+            "ServiceName": "AmazonEKS"
+          },
+          "expression": "",
+          "id": "",
+          "matchExact": true,
+          "metricName": "EstimatedCharges",
+          "namespace": "AWS/Billing",
+          "period": "",
+          "refId": "C",
+          "region": "us-east-1",
+          "statistics": ["Maximum"]
+        }
+      ],
+      "title": "Cost by Service",
+      "type": "timeseries",
+      "description": "AWS cost breakdown by major services (EC2, RDS, EKS). Identify which services contribute most to monthly spend."
+    },
+    {
+      "datasource": "CloudWatch",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "dimensions": {},
+          "expression": "",
+          "id": "",
+          "matchExact": false,
+          "metricName": "EstimatedCharges",
+          "namespace": "AWS/Billing",
+          "period": "",
+          "refId": "A",
+          "region": "us-east-1",
+          "statistics": ["Maximum"]
+        }
+      ],
+      "title": "Current Month Spend",
+      "type": "gauge",
+      "description": "Current month-to-date AWS spend. Gauge shows percentage of typical monthly budget (set alert thresholds at 70% and 90%)."
+    }
+  ],
+  "refresh": "1h",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["cost", "billing", "aws"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Cost Overview",
+  "uid": "cost-overview",
+  "version": 1
+}
