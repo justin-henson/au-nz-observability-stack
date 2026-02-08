@@ -33,8 +33,12 @@ output "log_group_names" {
 
 output "composite_alarm_names" {
   description = "Names of created composite alarms"
-  value = [
-    aws_cloudwatch_composite_alarm.service_degradation[0].alarm_name,
-    aws_cloudwatch_composite_alarm.capacity_exhaustion[0].alarm_name
-  ]
+  value = compact(concat(
+    length(aws_cloudwatch_composite_alarm.service_degradation) > 0 ? [
+      aws_cloudwatch_composite_alarm.service_degradation[0].alarm_name
+    ] : [],
+    length(aws_cloudwatch_composite_alarm.capacity_exhaustion) > 0 ? [
+      aws_cloudwatch_composite_alarm.capacity_exhaustion[0].alarm_name
+    ] : []
+  ))
 }

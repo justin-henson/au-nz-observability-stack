@@ -10,6 +10,9 @@ resource "aws_cloudwatch_dashboard" "infrastructure" {
           region = var.aws_region
           period = 300
           stat   = "Average"
+          metrics = [
+            ["AWS/EC2", "CPUUtilization", { stat = "Average" }]
+          ]
           yAxis = {
             left = {
               min = 0
@@ -25,6 +28,10 @@ resource "aws_cloudwatch_dashboard" "infrastructure" {
           region = var.aws_region
           period = 300
           stat   = "Sum"
+          metrics = [
+            ["AWS/EC2", "NetworkIn", { stat = "Sum", label = "Network In" }],
+            ["AWS/EC2", "NetworkOut", { stat = "Sum", label = "Network Out" }]
+          ]
           yAxis = {
             left = {
               min = 0

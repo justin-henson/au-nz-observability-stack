@@ -12,11 +12,6 @@ resource "aws_cloudwatch_log_metric_filter" "application_errors" {
     namespace = "CustomMetrics/${var.environment}"
     value     = "1"
     unit      = "Count"
-
-    dimensions = {
-      Environment = var.environment
-      LogType     = "application"
-    }
   }
 }
 
@@ -63,11 +58,6 @@ resource "aws_cloudwatch_log_metric_filter" "http_5xx" {
     namespace = "CustomMetrics/${var.environment}"
     value     = "1"
     unit      = "Count"
-
-    dimensions = {
-      Environment = var.environment
-      StatusCode  = "5xx"
-    }
   }
 }
 
@@ -82,11 +72,6 @@ resource "aws_cloudwatch_log_metric_filter" "slow_requests" {
     namespace = "CustomMetrics/${var.environment}"
     value     = "1"
     unit      = "Count"
-
-    dimensions = {
-      Environment = var.environment
-      Threshold   = "2000ms"
-    }
   }
 }
 
@@ -133,11 +118,6 @@ resource "aws_cloudwatch_log_metric_filter" "auth_failures" {
     namespace = "CustomMetrics/${var.environment}"
     value     = "1"
     unit      = "Count"
-
-    dimensions = {
-      Environment = var.environment
-      EventType   = "auth_failure"
-    }
   }
 }
 
