@@ -239,3 +239,28 @@ Grafana can be configured to send alerts based on dashboard panel queries. Howev
 - [Grafana Documentation](https://grafana.com/docs/grafana/latest/)
 - [Grafana Dashboard Best Practices](https://grafana.com/docs/grafana/latest/best-practices/)
 - [Grafana Helm Chart](https://github.com/grafana/helm-charts/tree/main/charts/grafana)
+
+## Dashboard Preview
+
+These dashboards are JSON definitions in Grafana's export format. To preview them:
+
+**Option 1 — Import into any Grafana instance:**
+1. Open Grafana → Dashboards → Import
+2. Upload the JSON file or paste its contents
+3. Select your Prometheus datasource when prompted
+
+**Option 2 — Use Grafana's provisioning (automated):**
+The `provisioning/` directory auto-loads all dashboards on startup. Deploy Grafana with
+the provisioning config mounted and dashboards appear immediately.
+
+**What you'll see when deployed:**
+
+| Dashboard | Panels | Key Metrics |
+|-----------|--------|-------------|
+| Infrastructure Overview | 8 panels across 4 rows | CPU, memory, network, disk per node |
+| Application Health | 6 panels in 3 rows (RED method) | Request rate, error rate, p50/p90/p99 latency |
+| Kubernetes Cluster | 8 panels | Pod status, resource requests vs limits, HPA events |
+| Cost Overview | 4 panels | Daily spend, service breakdown, cost trends, budget alerts |
+| SLO Burn Rate | 4 panels | Availability SLI, error budget remaining, multi-window burn rate |
+
+Every panel includes a description field explaining what to look for and when to investigate.
