@@ -173,7 +173,7 @@ inhibit_rules:
 
 **Message Format**: HTML email with alert table, grouped by severity
 
-**Rate Limiting**: Daily digest at 9am AEDT, or immediate for critical if PagerDuty fails
+**Rate Limiting**: Daily digest at 9am UTC, or immediate for critical if PagerDuty fails
 
 ## Time-Based Routing
 
@@ -194,7 +194,7 @@ routes:
     receiver: email-digest
 ```
 
-**business_hours** defined as Monday-Friday 9am-5pm AEDT/NZDT in Alertmanager config.
+**business_hours** defined as Monday-Friday 9am-5pm UTC in Alertmanager config.
 
 ## Alert Enrichment
 
@@ -219,9 +219,9 @@ Service baseline-web-api is degraded: 5xx error rate 12% AND p99 latency 3.2s
 
 Environment: production
 Namespace: production
-Started: 2026-02-08 14:23:45 AEDT
+Started: 2026-02-08 14:23:45 UTC
 
-Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md
+Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md
 Dashboard: https://grafana.company.internal/d/application-health
 ```
 
@@ -235,7 +235,7 @@ Service: baseline-web-api
 Duration: 6m 12s
 
 📊 Dashboard: https://grafana.company.internal/d/application-health
-📖 Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md
+📖 Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md
 ```
 
 ### Email Digest
@@ -244,12 +244,12 @@ Duration: 6m 12s
 Subject: [ALERTS] Daily Summary - 3 warnings, 1 info
 
 Warning Alerts (3):
-- HighCPU on i-0a1b2c3d4e5f (16:45 AEDT)
-- CertificateExpiringSoon for api.company.internal (20:12 AEDT)
-- HighMemory on production-worker-3 (22:30 AEDT)
+- HighCPU on i-0a1b2c3d4e5f (16:45 UTC)
+- CertificateExpiringSoon for api.company.internal (20:12 UTC)
+- HighMemory on production-worker-3 (22:30 UTC)
 
 Info Alerts (1):
-- MonitoringTargetDown for staging-prometheus (11:20 AEDT)
+- MonitoringTargetDown for staging-prometheus (11:20 UTC)
 
 Review: https://grafana.company.internal/alerting/list
 ```

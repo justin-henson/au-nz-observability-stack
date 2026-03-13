@@ -22,7 +22,7 @@ Silence recurring alerts for issues with approved remediation plans.
 **Example**: Disk space issue with storage expansion scheduled
 ```
 Duration: Until fix deployment time
-Reason: "Known issue - storage expansion scheduled for 2026-02-10 03:00 AEDT - Ticket: OPS-5678"
+Reason: "Known issue - storage expansion scheduled for 2026-02-10 03:00 UTC - Ticket: OPS-5678"
 Matchers: alertname="DiskFull", instance="worker-node-3"
 ```
 
@@ -253,7 +253,7 @@ Always include ticket reference in silence comment:
 ```
 Format: "Reason - Ticket: <TICKET-ID> - Change: <CHANGE-ID> - ETA: <TIMESTAMP>"
 
-Example: "Database replica rebuild after disk failure - Ticket: OPS-8765 - Change: CHG0023456 - ETA: 2026-02-09 15:00 AEDT"
+Example: "Database replica rebuild after disk failure - Ticket: OPS-8765 - Change: CHG0023456 - ETA: 2026-02-09 15:00 UTC"
 ```
 
 ### Creating Silences from Incident Slack Thread
@@ -292,7 +292,7 @@ If alert lacks information for triage:
 ```yaml
 annotations:
   description: "CPU usage is {{ $value }}% on {{ $labels.instance }}. Check for unexpected processes or consider scaling."
-  runbook_url: "https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  runbook_url: "https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
 ```
 
 ### 3. Create Inhibition Rule

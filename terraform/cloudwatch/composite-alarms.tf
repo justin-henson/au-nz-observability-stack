@@ -5,7 +5,7 @@ resource "aws_cloudwatch_composite_alarm" "service_degradation" {
   count = var.alb_arn_suffix != "" ? 1 : 0
 
   alarm_name        = "${var.environment}-service-degradation"
-  alarm_description = "Service is degraded: both high 5xx errors AND slow response times detected. Users experiencing errors and latency. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md"
+  alarm_description = "Service is degraded: both high 5xx errors AND slow response times detected. Users experiencing errors and latency. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md"
   actions_enabled   = true
   alarm_actions     = local.alarm_actions
   ok_actions        = local.ok_actions
@@ -29,7 +29,7 @@ resource "aws_cloudwatch_composite_alarm" "capacity_exhaustion" {
   count = length(var.ec2_instance_ids) > 0 ? 1 : 0
 
   alarm_name        = "${var.environment}-capacity-exhaustion"
-  alarm_description = "Multiple instances showing capacity exhaustion: CPU AND memory pressure detected. Scale out required. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description = "Multiple instances showing capacity exhaustion: CPU AND memory pressure detected. Scale out required. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   actions_enabled   = true
   alarm_actions     = local.alarm_actions
   ok_actions        = local.ok_actions

@@ -11,7 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu_warning" {
   period              = 300
   statistic           = "Average"
   threshold           = 80
-  alarm_description   = "CPU utilization exceeds 80% for 5 minutes. Investigate workload and consider scaling. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description   = "CPU utilization exceeds 80% for 5 minutes. Investigate workload and consider scaling. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu_critical" {
   period              = 180
   statistic           = "Average"
   threshold           = 95
-  alarm_description   = "CPU utilization exceeds 95% for 3 minutes. Immediate action required. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description   = "CPU utilization exceeds 95% for 3 minutes. Immediate action required. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   treat_missing_data  = "breaching"
 
   dimensions = {
@@ -75,7 +75,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_status_check" {
   period              = 60
   statistic           = "Maximum"
   threshold           = 0
-  alarm_description   = "EC2 instance status check failed for 2 consecutive periods. Instance may be unreachable. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description   = "EC2 instance status check failed for 2 consecutive periods. Instance may be unreachable. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   treat_missing_data  = "breaching"
 
   dimensions = {
@@ -109,7 +109,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_response_time" {
   period              = 300
   extended_statistic  = "p99"
   threshold           = 2
-  alarm_description   = "ALB p99 response time exceeds 2 seconds. User experience degraded. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md"
+  alarm_description   = "ALB p99 response time exceeds 2 seconds. User experience degraded. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -141,7 +141,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_5xx_count" {
   period              = 60
   statistic           = "Sum"
   threshold           = 10
-  alarm_description   = "ALB 5xx errors exceed 10 per minute. Application errors detected. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md"
+  alarm_description   = "ALB 5xx errors exceed 10 per minute. Application errors detected. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -173,7 +173,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_unhealthy_hosts" {
   period              = 60
   statistic           = "Average"
   threshold           = 0
-  alarm_description   = "Unhealthy hosts detected in target group for 3 minutes. Traffic routing degraded. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description   = "Unhealthy hosts detected in target group for 3 minutes. Traffic routing degraded. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -206,7 +206,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_rejected_connections" {
   period              = 60
   statistic           = "Sum"
   threshold           = 0
-  alarm_description   = "ALB rejecting connections. Load balancer at capacity or misconfigured. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description   = "ALB rejecting connections. Load balancer at capacity or misconfigured. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -240,7 +240,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
   period              = 300
   statistic           = "Average"
   threshold           = 80
-  alarm_description   = "RDS CPU utilization exceeds 80% for 5 minutes. Database performance may degrade. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md"
+  alarm_description   = "RDS CPU utilization exceeds 80% for 5 minutes. Database performance may degrade. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -272,7 +272,7 @@ resource "aws_cloudwatch_metric_alarm" "rds_memory" {
   period              = 300
   statistic           = "Average"
   threshold           = 268435456
-  alarm_description   = "RDS freeable memory below 256MB for 5 minutes. Database may experience OOM errors. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-MEMORY.md"
+  alarm_description   = "RDS freeable memory below 256MB for 5 minutes. Database may experience OOM errors. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-MEMORY.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -306,7 +306,7 @@ resource "aws_cloudwatch_metric_alarm" "eks_node_not_ready" {
   period              = 60
   statistic           = "Average"
   threshold           = 0
-  alarm_description   = "EKS cluster has nodes in NotReady state. Workload scheduling may fail. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md"
+  alarm_description   = "EKS cluster has nodes in NotReady state. Workload scheduling may fail. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {

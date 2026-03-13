@@ -79,7 +79,7 @@ Both approaches are production-ready. The choice depends on organizational stand
 ## Repository Structure
 
 ```
-au-nz-observability-stack/
+observability-stack/
 ├── terraform/
 │   ├── cloudwatch/          # CloudWatch dashboards, alarms, log groups, metric filters
 │   └── sns/                 # SNS topics for alarm routing
@@ -97,8 +97,8 @@ au-nz-observability-stack/
 ### CloudWatch Stack
 
 ```bash
-git clone https://github.com/justin-henson/au-nz-observability-stack.git
-cd au-nz-observability-stack/terraform/sns
+git clone https://github.com/justin-henson/observability-stack.git
+cd observability-stack/terraform/sns
 terraform init
 terraform plan -var="environment=production"
 terraform apply
@@ -111,7 +111,7 @@ terraform apply
 
 ### Prometheus + Grafana on EKS
 
-Requires an existing EKS cluster (see [au-nz-k8s-baseline-eks](https://github.com/justin-henson/au-nz-k8s-baseline-eks)):
+Requires an existing EKS cluster (see [k8s-baseline-eks](https://github.com/justin-henson/k8s-baseline-eks)):
 
 ```bash
 # Deploy Prometheus with Helm
@@ -136,10 +136,10 @@ See [`prometheus/README.md`](prometheus/README.md) and [`grafana/README.md`](gra
 
 This observability stack integrates with the full portfolio infrastructure:
 
-- [**au-nz-cloud-baseline-aws**](https://github.com/justin-henson/au-nz-cloud-baseline-aws) — this stack monitors THAT infrastructure (VPC, EC2, ALB, RDS)
-- [**au-nz-k8s-baseline-eks**](https://github.com/justin-henson/au-nz-k8s-baseline-eks) — Prometheus and Grafana run ON that cluster
-- [**au-nz-cicd-pipeline**](https://github.com/justin-henson/au-nz-cicd-pipeline) — monitoring config deployed THROUGH that pipeline
-- [**au-nz-ops-runbooks**](https://github.com/justin-henson/au-nz-ops-runbooks) — runbooks HERE extend the operational templates THERE
+- [**cloud-baseline-aws**](https://github.com/justin-henson/cloud-baseline-aws) — this stack monitors THAT infrastructure (VPC, EC2, ALB, RDS)
+- [**k8s-baseline-eks**](https://github.com/justin-henson/k8s-baseline-eks) — Prometheus and Grafana run ON that cluster
+- [**cicd-pipeline**](https://github.com/justin-henson/cicd-pipeline) — monitoring config deployed THROUGH that pipeline
+- [**ops-runbooks**](https://github.com/justin-henson/ops-runbooks) — runbooks HERE extend the operational templates THERE
 
 ## Key Features
 
@@ -201,4 +201,4 @@ MIT License — see [LICENSE](LICENSE) file.
 
 ---
 
-*Built with ☕ for AU/NZ DevOps opportunities*
+

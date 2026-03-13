@@ -107,7 +107,7 @@ This document defines severity levels, response time expectations, and escalatio
 ## On-Call Rotation
 
 ### Schedule
-- Primary on-call: 7-day rotation, Monday 9am to Monday 9am AEDT/NZDT
+- Primary on-call: 7-day rotation, Monday 9am to Monday 9am UTC
 - Secondary on-call: 7-day rotation, offset by 3-4 days from primary
 - Manager on-call: 2-week rotation (P1 escalations only)
 

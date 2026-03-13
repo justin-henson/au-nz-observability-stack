@@ -15,7 +15,7 @@ groups:
             CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}
             for more than 5 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md
 
       - alert: CriticalCPU
         expr: |
@@ -30,7 +30,7 @@ groups:
             CPU usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}.
             Immediate action required.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-CPU.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-CPU.md
 
       - alert: HighMemory
         expr: |
@@ -45,7 +45,7 @@ groups:
             Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}
             for more than 5 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/HIGH-MEMORY.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/HIGH-MEMORY.md
 
       - alert: DiskFull
         expr: |
@@ -61,7 +61,7 @@ groups:
             Disk {{ $labels.mountpoint }} on {{ $labels.instance }} is
             {{ $value | humanizePercentage }} full.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/DISK-FULL.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/DISK-FULL.md
 
       - alert: DiskCritical
         expr: |
@@ -77,7 +77,7 @@ groups:
             Disk {{ $labels.mountpoint }} on {{ $labels.instance }} is
             {{ $value | humanizePercentage }} full. Immediate cleanup required.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/DISK-FULL.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/DISK-FULL.md
 
       - alert: TargetDown
         expr: up == 0
@@ -91,7 +91,7 @@ groups:
             {{ $labels.job }} target {{ $labels.instance }} has been down
             for more than 5 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
 
   - name: kubernetes-alerts
     interval: 30s
@@ -109,7 +109,7 @@ groups:
             Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }})
             is restarting {{ $value | humanize }} times per second.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
 
       - alert: PodNotReady
         expr: |
@@ -124,7 +124,7 @@ groups:
             Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state
             for more than 10 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
 
       - alert: DeploymentReplicasMismatch
         expr: |
@@ -139,7 +139,7 @@ groups:
             Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has {{ $value }}
             replicas available, but {{ $labels.spec_replicas }} desired.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
 
       - alert: NodeNotReady
         expr: |
@@ -154,7 +154,7 @@ groups:
             Node {{ $labels.node }} has been in NotReady state
             for more than 5 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
 
       - alert: PersistentVolumeClaimPending
         expr: |
@@ -169,7 +169,7 @@ groups:
             PersistentVolumeClaim {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }}
             has been pending for more than 10 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/DISK-FULL.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/DISK-FULL.md
 
   - name: application-alerts
     interval: 30s
@@ -188,7 +188,7 @@ groups:
             Service {{ $labels.service }} has {{ $value | humanizePercentage }}
             5xx error rate over the last 5 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md
 
       - alert: HighLatency
         expr: |
@@ -203,7 +203,7 @@ groups:
             Service {{ $labels.service }} has p99 latency of {{ $value | humanizeDuration }}
             over the last 5 minutes.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md
 
       - alert: LowRequestRate
         expr: |
@@ -218,7 +218,7 @@ groups:
             Service {{ $labels.service }} is receiving {{ $value | humanize }} requests per second.
             Service may be down or traffic is not reaching it.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
+            https://github.com/justin-henson/observability-stack/blob/main/runbooks/POD-CRASHLOOP.md
 
   - name: certificate-alerts
     interval: 1h
@@ -236,7 +236,7 @@ groups:
             Certificate for {{ $labels.instance }} will expire in
             {{ $value | humanizeDuration }}.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack
+            https://github.com/justin-henson/observability-stack
             /blob/main/runbooks/CERTIFICATE-EXPIRY.md
 
       - alert: CertificateExpiryCritical
@@ -252,5 +252,5 @@ groups:
             Certificate for {{ $labels.instance }} will expire in
             {{ $value | humanizeDuration }}. Immediate renewal required.
           runbook_url: >-
-            https://github.com/justin-henson/au-nz-observability-stack
+            https://github.com/justin-henson/observability-stack
             /blob/main/runbooks/CERTIFICATE-EXPIRY.md

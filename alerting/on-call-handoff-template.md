@@ -10,7 +10,7 @@ Use this template at the end of each on-call rotation to brief the next on-call 
 **Incoming On-Call**: [Next Person's Name]
 **Rotation Period**: [Start Date] - [End Date]
 **Handoff Date**: [Today's Date]
-**Handoff Time**: [Time] AEDT/NZDT
+**Handoff Time**: [Time] UTC
 
 ---
 
@@ -86,7 +86,7 @@ Use this template at the end of each on-call rotation to brief the next on-call 
 **Example**:
 | Date/Time | Service | Change | Ticket | Owner | Impact |
 |-----------|---------|--------|--------|-------|--------|
-| 2026-02-10 03:00 AEDT | PostgreSQL | Major version upgrade | CHG-5678 | @database-team | 15-20 min downtime |
+| 2026-02-10 03:00 UTC | PostgreSQL | Major version upgrade | CHG-5678 | @database-team | 15-20 min downtime |
 
 ### Planned Maintenance Windows
 
@@ -97,7 +97,7 @@ Use this template at the end of each on-call rotation to brief the next on-call 
 **Example**:
 | Date/Time | System | Work Description | Ticket | Alerts Silenced? |
 |-----------|--------|------------------|--------|------------------|
-| 2026-02-11 20:00-22:00 AEDT | EKS Cluster | Node group upgrade | OPS-7890 | Yes (see Alertmanager) |
+| 2026-02-11 20:00-22:00 UTC | EKS Cluster | Node group upgrade | OPS-7890 | Yes (see Alertmanager) |
 
 ---
 
@@ -204,7 +204,7 @@ List all active alert silences and why they exist:
 - [Gotcha or trap to avoid]
 
 **Example**:
-> - Daily batch job at 2am AEDT causes CPU spike - normal behavior, don't panic
+> - Daily batch job at 2am UTC causes CPU spike - normal behavior, don't panic
 > - SSL cert for api.company.internal expires on 2026-02-15 - reminder already set
 > - Never run `terraform apply` in production without engineering manager approval
 
@@ -267,4 +267,4 @@ Incoming: [Next Person's Name] - [Date/Time] (sign to acknowledge)
 - [Escalation Policy](escalation-policy.md)
 - [Alert Routing](alert-routing.md)
 - [Runbooks](../runbooks/)
-- [au-nz-ops-runbooks](https://github.com/justin-henson/au-nz-ops-runbooks) - Incident response templates
+- [ops-runbooks](https://github.com/justin-henson/ops-runbooks) - Incident response templates

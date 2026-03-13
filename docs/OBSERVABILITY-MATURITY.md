@@ -170,7 +170,7 @@ modules:
 ```
 
 **Probes**:
-- Login flow (every 5 minutes from Sydney, Melbourne, Auckland)
+- Login flow (every 5 minutes from multiple global regions)
 - Checkout flow (every 10 minutes)
 - API endpoints (every 1 minute)
 

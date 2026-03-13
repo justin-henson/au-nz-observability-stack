@@ -25,7 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "application_error_rate" {
   period              = 300
   statistic           = "Sum"
   threshold           = 50
-  alarm_description   = "Application error count exceeds 50 in 5 minutes. Check application logs for root cause. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md"
+  alarm_description   = "Application error count exceeds 50 in 5 minutes. Check application logs for root cause. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {
@@ -85,7 +85,7 @@ resource "aws_cloudwatch_metric_alarm" "slow_request_rate" {
   period              = 300
   statistic           = "Sum"
   threshold           = 20
-  alarm_description   = "Slow request count exceeds 20 in 5 minutes. Application performance degraded. Runbook: https://github.com/justin-henson/au-nz-observability-stack/blob/main/runbooks/5XX-SPIKE.md"
+  alarm_description   = "Slow request count exceeds 20 in 5 minutes. Application performance degraded. Runbook: https://github.com/justin-henson/observability-stack/blob/main/runbooks/5XX-SPIKE.md"
   treat_missing_data  = "notBreaching"
 
   dimensions = {

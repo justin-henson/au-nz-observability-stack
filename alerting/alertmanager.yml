@@ -208,7 +208,7 @@ time_intervals:
           - start_time: '09:00'
             end_time: '17:00'
         weekdays: ['monday:friday']
-        location: 'Australia/Sydney'
+        location: 'UTC'
 
   - name: after_hours
     time_intervals:
@@ -216,6 +216,6 @@ time_intervals:
           - start_time: '17:00'
             end_time: '09:00'
         weekdays: ['monday:friday']
-        location: 'Australia/Sydney'
+        location: 'UTC'
       - weekdays: ['saturday', 'sunday']
-        location: 'Australia/Sydney'
+        location: 'UTC'

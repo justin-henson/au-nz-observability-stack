@@ -162,7 +162,7 @@ promtool query instant http://prometheus:9090 '<metric-query>'
 ### Long-Term (P1/P2 Only)
 
 - [ ] Schedule postmortem meeting (within 48h for P1, 5 days for P2)
-- [ ] Document incident in postmortem (use template from [au-nz-ops-runbooks](https://github.com/justin-henson/au-nz-ops-runbooks))
+- [ ] Document incident in postmortem (use template from [ops-runbooks](https://github.com/justin-henson/ops-runbooks))
 - [ ] Identify and track preventive measures
 - [ ] Share learnings with team in next retrospective
 

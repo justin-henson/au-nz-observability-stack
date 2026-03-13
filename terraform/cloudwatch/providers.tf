@@ -14,10 +14,10 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "au-nz-observability-stack"
+      Project     = "observability-stack"
       ManagedBy   = "Terraform"
       Environment = var.environment
-      Repository  = "https://github.com/justin-henson/au-nz-observability-stack"
+      Repository  = "https://github.com/justin-henson/observability-stack"
     }
   }
 }

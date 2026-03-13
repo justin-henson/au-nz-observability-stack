@@ -12,7 +12,7 @@ This directory contains Prometheus configuration files for monitoring an EKS clu
 
 ### Prerequisites
 
-- EKS cluster deployed (see [au-nz-k8s-baseline-eks](https://github.com/justin-henson/au-nz-k8s-baseline-eks))
+- EKS cluster deployed (see [k8s-baseline-eks](https://github.com/justin-henson/k8s-baseline-eks))
 - kubectl configured to access the cluster
 - Helm 3 installed
 
